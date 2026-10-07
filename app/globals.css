@@ -1,74 +1,96 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Dark mode follows the phone/computer setting, so `dark:` classes in components use the same rule */
+@custom-variant dark (@media (prefers-color-scheme: dark));
 
 /*
- * Design tokens: the named values every component reads from.
- * Names follow shadcn/ui's convention so its components pick them up.
+ * Design tokens, taken from the FocusPT design system (tokens/colors.css, typography.css, radius.css).
+ * Names follow shadcn/ui's convention so its components pick them up; the FocusPT name is in each comment.
  * Each colour has a "-foreground" partner: the text colour that sits on top of it.
  */
 
 :root {
   /* Surfaces and text */
-  --background: #fafaf7; /* warm off-white page */
-  --foreground: #1c1c1a; /* near-black text */
-  --card: #ffffff;
-  --card-foreground: #1c1c1a;
+  --background: #f5f6f7; /* surface-200: page */
+  --foreground: #14181c; /* ink */
+  --card: #ffffff; /* surface-100: cards, panels, inputs */
+  --card-foreground: #14181c;
   --popover: #ffffff;
-  --popover-foreground: #1c1c1a;
+  --popover-foreground: #14181c;
 
   /* Quiet supporting colours */
-  --muted: #f0f0eb;
-  --muted-foreground: #6b6b66; /* secondary text, hints */
-  --secondary: #f0f0eb;
-  --secondary-foreground: #1c1c1a;
-  --accent: #e6f2f0; /* subtle teal tint for hover states */
-  --accent-foreground: #0b4f4a;
+  --muted: #eceef0; /* not in FocusPT: one step below surface-200 so hover shows on the grey page */
+  --muted-foreground: #525c66; /* ink-muted */
+  --secondary: #eceef0;
+  --secondary-foreground: #14181c;
+  --accent: #e4f5f1; /* brand-100: selected row, subtle emphasis, never a large field */
+  --accent-foreground: #0a5f52; /* brand-700 */
 
-  /* The one accent: teal for actions, links and progress */
-  --primary: #0f766e;
-  --primary-foreground: #ffffff;
+  /* The one brand hue: primary actions, links, active states, focus */
+  --primary: #0e7c6b; /* brand-600 */
+  --primary-hover: #0a5f52; /* brand-700 */
+  --primary-foreground: #ffffff; /* text-on-brand */
 
-  /* Feedback */
-  --destructive: #b42318;
-  --success: #15803d;
+  /* State colours: never decoration */
+  --destructive: #b3261e; /* danger */
+  --success: #1d7a4c;
+  --warning: #7a5000;
 
   /* Lines and focus */
-  --border: #e4e4de;
-  --input: #d6d6cf;
-  --ring: #0f766e;
+  --border: #e2e5e9;
+  --input: #e2e5e9;
+  --ring: #0e7c6b; /* focus-ring = brand-600 */
 
-  /* Shape */
+  /* Charts: not in FocusPT yet, built from its palette with the brand hue first */
+  --chart-1: #0e7c6b;
+  --chart-2: #525c66;
+  --chart-3: #0a5f52;
+  --chart-4: #a3acb5;
+  --chart-5: #7a5000;
+
+  /* shadcn's base radius = FocusPT radius-md */
   --radius: 10px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #141413;
-    --foreground: #ededea;
-    --card: #1c1c1a;
-    --card-foreground: #ededea;
-    --popover: #1c1c1a;
-    --popover-foreground: #ededea;
+    --background: #17191c;
+    --foreground: #f2f4f5;
+    --card: #0f1113;
+    --card-foreground: #f2f4f5;
+    --popover: #0f1113;
+    --popover-foreground: #f2f4f5;
 
-    --muted: #262624;
-    --muted-foreground: #a3a39c;
-    --secondary: #262624;
-    --secondary-foreground: #ededea;
-    --accent: #12302d;
-    --accent-foreground: #99e0d6;
+    --muted: #212429; /* not in FocusPT, see light theme */
+    --muted-foreground: #9aa3ac;
+    --secondary: #212429;
+    --secondary-foreground: #f2f4f5;
+    --accent: #12312b;
+    --accent-foreground: #34c6ac;
 
-    --primary: #2bb3a3;
-    --primary-foreground: #06201d;
+    --primary: #34c6ac;
+    --primary-hover: #28a08b;
+    --primary-foreground: #0f1113;
 
-    --destructive: #f97066;
-    --success: #4ade80;
+    --destructive: #f2837b;
+    --success: #3fcb84;
+    --warning: #e0a626;
 
-    --border: #2e2e2b;
-    --input: #3a3a36;
-    --ring: #2bb3a3;
+    --border: #2a2e33;
+    --input: #2a2e33;
+    --ring: #34c6ac;
+
+    --chart-1: #34c6ac;
+    --chart-2: #9aa3ac;
+    --chart-3: #28a08b;
+    --chart-4: #525c66;
+    --chart-5: #e0a626;
   }
 }
 
-/* Expose the tokens to Tailwind, so `bg-primary`, `text-muted-foreground`, `rounded-lg` etc. work */
+/* Expose the tokens to Tailwind, so `bg-primary`, `text-muted-foreground`, `rounded-sm` etc. work */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -83,24 +105,61 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
   --color-primary-foreground: var(--primary-foreground);
   --color-destructive: var(--destructive);
   --color-success: var(--success);
+  --color-warning: var(--warning);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Fonts are loaded in app/layout.tsx. Display: headings only. Sans: everything people read. */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-display);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+@theme {
+  /* FocusPT radius. sm: things people press or type in. md: cards, panels. lg: large surfaces only. */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  /* FocusPT type scale → classes like `text-heading-1`, `text-body`, `text-label` */
+  --text-display: 40px;
+  --text-display--line-height: 1.1;
+  --text-display--letter-spacing: -0.02em;
+  --text-display--font-weight: 600;
+  --text-heading-1: 28px;
+  --text-heading-1--line-height: 1.2;
+  --text-heading-1--letter-spacing: -0.015em;
+  --text-heading-1--font-weight: 600;
+  --text-heading-2: 20px;
+  --text-heading-2--line-height: 1.3;
+  --text-heading-2--letter-spacing: -0.01em;
+  --text-heading-2--font-weight: 600;
+  --text-body: 15px;
+  --text-body--line-height: 1.55;
+  --text-body-small: 13px;
+  --text-body-small--line-height: 1.5;
+  --text-label: 13px;
+  --text-label--line-height: 1.4;
+  --text-label--font-weight: 600;
+  --text-caption: 12px;
+  --text-caption--line-height: 1.4;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background font-sans text-body text-foreground;
+  }
 }
