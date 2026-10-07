@@ -2,95 +2,100 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-/* Dark mode follows the phone/computer setting, so `dark:` classes in components use the same rule */
-@custom-variant dark (@media (prefers-color-scheme: dark));
+/* Dark-first: `dark:` classes in components apply unless the page is switched to the light theme */
+@custom-variant dark (&:where(:root:not([data-theme="light"]) *));
 
 /*
- * Design tokens, taken from the FocusPT design system (tokens/colors.css, typography.css, radius.css).
+ * Design tokens, based on the FocusPT design system (tokens/colors.css, typography.css, radius.css),
+ * reshaped for Coach Lab after the Pillowtalk and Future Pro references: dark-first, soft round shapes.
  * Names follow shadcn/ui's convention so its components pick them up; the FocusPT name is in each comment.
  * Each colour has a "-foreground" partner: the text colour that sits on top of it.
  */
 
+/* Dark theme: the default */
 :root {
-  /* Surfaces and text */
+  /* Surfaces and text. The page is the darkest layer; cards sit one step lighter, raised above it. */
+  --background: #0f1113; /* FocusPT dark surface-100 */
+  --foreground: #f2f4f5; /* ink */
+  --card: #1c1f23; /* not in FocusPT: raised card on the dark page */
+  --card-foreground: #f2f4f5;
+  --popover: #1c1f23;
+  --popover-foreground: #f2f4f5;
+
+  /* Quiet supporting colours */
+  --muted: #2a2e33; /* soft pills, hover */
+  --muted-foreground: #9aa3ac; /* ink-muted */
+  --secondary: #2a2e33;
+  --secondary-foreground: #f2f4f5;
+  --accent: #12312b; /* brand-100: selected row, subtle emphasis */
+  --accent-foreground: #34c6ac;
+
+  /* The one brand hue: primary actions, links, active states, focus */
+  --primary: #34c6ac; /* brand-600 */
+  --primary-hover: #28a08b; /* brand-700 */
+  --primary-foreground: #0f1113; /* text-on-brand */
+
+  /* State colours: never decoration */
+  --destructive: #f2837b; /* danger */
+  --success: #3fcb84;
+  --warning: #e0a626;
+
+  /* Lines and focus */
+  --border: #2a2e33;
+  --input: #2a2e33;
+  --ring: #34c6ac; /* focus-ring = brand-600 */
+
+  /* Charts: not in FocusPT yet, built from its palette with the brand hue first */
+  --chart-1: #34c6ac;
+  --chart-2: #9aa3ac;
+  --chart-3: #28a08b;
+  --chart-4: #525c66;
+  --chart-5: #e0a626;
+
+  /* shadcn's base radius = our card radius */
+  --radius: 20px;
+
+  color-scheme: dark;
+}
+
+/* Light theme: kept for a later toggle. Nothing switches to it yet. */
+:root[data-theme="light"] {
   --background: #f5f6f7; /* surface-200: page */
   --foreground: #14181c; /* ink */
-  --card: #ffffff; /* surface-100: cards, panels, inputs */
+  --card: #ffffff; /* surface-100 */
   --card-foreground: #14181c;
   --popover: #ffffff;
   --popover-foreground: #14181c;
 
-  /* Quiet supporting colours */
   --muted: #eceef0; /* not in FocusPT: one step below surface-200 so hover shows on the grey page */
-  --muted-foreground: #525c66; /* ink-muted */
+  --muted-foreground: #525c66;
   --secondary: #eceef0;
   --secondary-foreground: #14181c;
-  --accent: #e4f5f1; /* brand-100: selected row, subtle emphasis, never a large field */
-  --accent-foreground: #0a5f52; /* brand-700 */
+  --accent: #e4f5f1;
+  --accent-foreground: #0a5f52;
 
-  /* The one brand hue: primary actions, links, active states, focus */
-  --primary: #0e7c6b; /* brand-600 */
-  --primary-hover: #0a5f52; /* brand-700 */
-  --primary-foreground: #ffffff; /* text-on-brand */
+  --primary: #0e7c6b;
+  --primary-hover: #0a5f52;
+  --primary-foreground: #ffffff;
 
-  /* State colours: never decoration */
-  --destructive: #b3261e; /* danger */
+  --destructive: #b3261e;
   --success: #1d7a4c;
   --warning: #7a5000;
 
-  /* Lines and focus */
   --border: #e2e5e9;
   --input: #e2e5e9;
-  --ring: #0e7c6b; /* focus-ring = brand-600 */
+  --ring: #0e7c6b;
 
-  /* Charts: not in FocusPT yet, built from its palette with the brand hue first */
   --chart-1: #0e7c6b;
   --chart-2: #525c66;
   --chart-3: #0a5f52;
   --chart-4: #a3acb5;
   --chart-5: #7a5000;
 
-  /* shadcn's base radius = FocusPT radius-md */
-  --radius: 10px;
+  color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #17191c;
-    --foreground: #f2f4f5;
-    --card: #0f1113;
-    --card-foreground: #f2f4f5;
-    --popover: #0f1113;
-    --popover-foreground: #f2f4f5;
-
-    --muted: #212429; /* not in FocusPT, see light theme */
-    --muted-foreground: #9aa3ac;
-    --secondary: #212429;
-    --secondary-foreground: #f2f4f5;
-    --accent: #12312b;
-    --accent-foreground: #34c6ac;
-
-    --primary: #34c6ac;
-    --primary-hover: #28a08b;
-    --primary-foreground: #0f1113;
-
-    --destructive: #f2837b;
-    --success: #3fcb84;
-    --warning: #e0a626;
-
-    --border: #2a2e33;
-    --input: #2a2e33;
-    --ring: #34c6ac;
-
-    --chart-1: #34c6ac;
-    --chart-2: #9aa3ac;
-    --chart-3: #28a08b;
-    --chart-4: #525c66;
-    --chart-5: #e0a626;
-  }
-}
-
-/* Expose the tokens to Tailwind, so `bg-primary`, `text-muted-foreground`, `rounded-sm` etc. work */
+/* Expose the tokens to Tailwind, so `bg-primary`, `text-muted-foreground`, `rounded-md` etc. work */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -126,21 +131,21 @@
 }
 
 @theme {
-  /* FocusPT radius. sm: things people press or type in. md: cards, panels. lg: large surfaces only. */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
+  /* Soft, round shapes. Buttons and inputs are pills (`rounded-full`). */
+  --radius-sm: 12px; /* tiles, badges, small surfaces */
+  --radius-md: 20px; /* cards, panels, option rows */
+  --radius-lg: 28px; /* sheets, large panels */
 
-  /* FocusPT type scale → classes like `text-heading-1`, `text-body`, `text-label` */
+  /* Type scale (FocusPT, headings enlarged) → classes like `text-heading-1`, `text-body`, `text-label` */
   --text-display: 40px;
   --text-display--line-height: 1.1;
   --text-display--letter-spacing: -0.02em;
   --text-display--font-weight: 600;
-  --text-heading-1: 28px;
-  --text-heading-1--line-height: 1.2;
+  --text-heading-1: 32px;
+  --text-heading-1--line-height: 1.15;
   --text-heading-1--letter-spacing: -0.015em;
   --text-heading-1--font-weight: 600;
-  --text-heading-2: 20px;
+  --text-heading-2: 22px;
   --text-heading-2--line-height: 1.3;
   --text-heading-2--letter-spacing: -0.01em;
   --text-heading-2--font-weight: 600;

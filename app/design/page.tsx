@@ -44,9 +44,10 @@ const spacing = [
 ];
 
 const radii = [
-  { name: "sm · 6px", use: "Buttons, inputs", className: "rounded-sm" },
-  { name: "md · 10px", use: "Cards, panels", className: "rounded-md" },
-  { name: "lg · 16px", use: "Large surfaces", className: "rounded-lg" },
+  { name: "sm · 12px", use: "Tiles, badges", className: "rounded-sm" },
+  { name: "md · 20px", use: "Cards, rows", className: "rounded-md" },
+  { name: "lg · 28px", use: "Sheets", className: "rounded-lg" },
+  { name: "full", use: "Buttons, inputs", className: "rounded-full" },
 ];
 
 const buttonVariants = ["default", "outline", "secondary", "ghost", "destructive", "link"] as const;
@@ -72,8 +73,8 @@ export default function DesignPage() {
         <p className="text-label text-primary">Coach Lab</p>
         <h1 className="font-display text-heading-1">Design system</h1>
         <p className="text-muted-foreground">
-          The colours, type and components every screen is built from. Based on the FocusPT design system.
-          Switch your device to dark mode to see the dark set.
+          The colours, type and components every screen is built from. Based on the FocusPT design system,
+          reshaped dark-first after the Pillowtalk and Future Pro references.
         </p>
       </header>
 

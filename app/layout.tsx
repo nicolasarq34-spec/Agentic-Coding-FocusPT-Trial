@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
@@ -17,6 +17,12 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "Coach Lab",
   description: "Programmes from your trainer, workouts logged by you.",
+};
+
+// Dark-first: the phone's status bar and built-in form controls match the dark page.
+export const viewport: Viewport = {
+  themeColor: "#0f1113",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
