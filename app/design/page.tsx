@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ArrowLeft, List, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { OptionRowDemo } from "./option-row-demo";
 
 export const metadata: Metadata = {
   title: "Design system · Coach Lab",
@@ -190,6 +191,13 @@ export default function DesignPage() {
             </Button>
           </div>
         </div>
+      </Section>
+
+      <Section title="Option row">
+        <p className="text-body-small text-muted-foreground">
+          A choice the person taps to select. Used for the trainer or client choice at sign-up. Try it.
+        </p>
+        <OptionRowDemo />
       </Section>
 
       <Section title="Empty state">

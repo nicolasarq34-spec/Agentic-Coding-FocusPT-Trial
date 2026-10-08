@@ -1,5 +1,21 @@
 import { expect, test } from "@playwright/test";
 
+// Option rows: one choice at a time, selectable by tap/click and by keyboard.
+test("option row selects one role at a time", async ({ page }) => {
+  await page.goto("/design");
+  const trainer = page.getByRole("button", { name: /I'm a trainer/ });
+  const client = page.getByRole("button", { name: /I'm a client/ });
+
+  await trainer.click();
+  await expect(trainer).toHaveAttribute("aria-pressed", "true");
+  await expect(client).toHaveAttribute("aria-pressed", "false");
+
+  await client.focus();
+  await page.keyboard.press("Space");
+  await expect(client).toHaveAttribute("aria-pressed", "true");
+  await expect(trainer).toHaveAttribute("aria-pressed", "false");
+});
+
 // The primary action must be easy to tap on a phone, and compact (not full width) with a mouse.
 test("primary button fits the device", async ({ page, isMobile }) => {
   await page.goto("/design");
