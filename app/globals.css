@@ -1,26 +1,174 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
+/* Dark-first: `dark:` classes in components apply unless the page is switched to the light theme */
+@custom-variant dark (&:where(:root:not([data-theme="light"]) *));
+
+/*
+ * Design tokens, based on the FocusPT design system (tokens/colors.css, typography.css, radius.css),
+ * reshaped for Coach Lab after the Pillowtalk and Future Pro references: dark-first, soft round shapes.
+ * Names follow shadcn/ui's convention so its components pick them up; the FocusPT name is in each comment.
+ * Each colour has a "-foreground" partner: the text colour that sits on top of it.
+ */
+
+/* Dark theme: the default */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Surfaces and text. The page is the darkest layer; cards sit one step lighter, raised above it. */
+  --background: #0f1113; /* FocusPT dark surface-100 */
+  --foreground: #f2f4f5; /* ink */
+  --card: #1c1f23; /* not in FocusPT: raised card on the dark page */
+  --card-foreground: #f2f4f5;
+  --popover: #1c1f23;
+  --popover-foreground: #f2f4f5;
+
+  /* Quiet supporting colours */
+  --muted: #2a2e33; /* soft pills, hover */
+  --muted-foreground: #9aa3ac; /* ink-muted */
+  --secondary: #2a2e33;
+  --secondary-foreground: #f2f4f5;
+  --accent: #12312b; /* brand-100: selected row, subtle emphasis */
+  --accent-foreground: #34c6ac;
+
+  /* The one brand hue: primary actions, links, active states, focus */
+  --primary: #34c6ac; /* brand-600 */
+  --primary-hover: #28a08b; /* brand-700 */
+  --primary-foreground: #0f1113; /* text-on-brand */
+
+  /* State colours: never decoration */
+  --destructive: #f2837b; /* danger */
+  --success: #3fcb84;
+  --warning: #e0a626;
+
+  /* Lines and focus */
+  --border: #2a2e33;
+  --input: #2a2e33;
+  --ring: #34c6ac; /* focus-ring = brand-600 */
+
+  /* Charts: not in FocusPT yet, built from its palette with the brand hue first */
+  --chart-1: #34c6ac;
+  --chart-2: #9aa3ac;
+  --chart-3: #28a08b;
+  --chart-4: #525c66;
+  --chart-5: #e0a626;
+
+  /* shadcn's base radius = our card radius */
+  --radius: 20px;
+
+  color-scheme: dark;
 }
 
+/* Light theme: kept for a later toggle. Nothing switches to it yet. */
+:root[data-theme="light"] {
+  --background: #f5f6f7; /* surface-200: page */
+  --foreground: #14181c; /* ink */
+  --card: #ffffff; /* surface-100 */
+  --card-foreground: #14181c;
+  --popover: #ffffff;
+  --popover-foreground: #14181c;
+
+  --muted: #eceef0; /* not in FocusPT: one step below surface-200 so hover shows on the grey page */
+  --muted-foreground: #525c66;
+  --secondary: #eceef0;
+  --secondary-foreground: #14181c;
+  --accent: #e4f5f1;
+  --accent-foreground: #0a5f52;
+
+  --primary: #0e7c6b;
+  --primary-hover: #0a5f52;
+  --primary-foreground: #ffffff;
+
+  --destructive: #b3261e;
+  --success: #1d7a4c;
+  --warning: #7a5000;
+
+  --border: #e2e5e9;
+  --input: #e2e5e9;
+  --ring: #0e7c6b;
+
+  --chart-1: #0e7c6b;
+  --chart-2: #525c66;
+  --chart-3: #0a5f52;
+  --chart-4: #a3acb5;
+  --chart-5: #7a5000;
+
+  color-scheme: light;
+}
+
+/* Expose the tokens to Tailwind, so `bg-primary`, `text-muted-foreground`, `rounded-md` etc. work */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Fonts are loaded in app/layout.tsx. Display: headings only. Sans: everything people read. */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-display);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@theme {
+  /* Page widths → `max-w-reading`, `max-w-app`. Side padding: px-4 on phones, sm:px-6, lg:px-8. */
+  --container-reading: 40rem; /* 640px: client screens and forms (sign-up, log-in, today's workout) */
+  --container-app: 75rem; /* 1200px: trainer screens (programme builder, dashboard, tables) */
+
+  /* Soft, round shapes. Buttons and inputs are pills (`rounded-full`). */
+  --radius-sm: 12px; /* tiles, badges, small surfaces */
+  --radius-md: 20px; /* cards, panels, option rows */
+  --radius-lg: 28px; /* sheets, large panels */
+
+  /* Type scale (FocusPT, headings enlarged) → classes like `text-heading-1`, `text-body`, `text-label` */
+  --text-display: 40px;
+  --text-display--line-height: 1.1;
+  --text-display--letter-spacing: -0.02em;
+  --text-display--font-weight: 600;
+  --text-heading-1: 32px;
+  --text-heading-1--line-height: 1.15;
+  --text-heading-1--letter-spacing: -0.015em;
+  --text-heading-1--font-weight: 600;
+  --text-heading-2: 22px;
+  --text-heading-2--line-height: 1.3;
+  --text-heading-2--letter-spacing: -0.01em;
+  --text-heading-2--font-weight: 600;
+  --text-body: 15px;
+  --text-body--line-height: 1.55;
+  --text-body-small: 13px;
+  --text-body-small--line-height: 1.5;
+  --text-label: 13px;
+  --text-label--line-height: 1.4;
+  --text-label--font-weight: 600;
+  --text-caption: 12px;
+  --text-caption--line-height: 1.4;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    @apply bg-background font-sans text-body text-foreground;
+  }
 }

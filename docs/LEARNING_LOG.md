@@ -9,3 +9,11 @@ What was built, what was learned, what's next. Newest at the bottom.
 - **Learned:** debugging means reading the first line of the error and finding what the thing depends on. Docker hung because WSL was missing; `npx` was blocked by a Windows script setting; npm refused Vitest because two packages wanted different versions of the Node types.
 - **Learned:** write the test first, watch it fail, then write the code (`bestWeight` in `lib/progress`).
 - **Next:** feature 1, sign-up and log-in with a trainer or client role (Supabase Auth).
+
+## 2026-10-07/08 · Session 2: design system
+
+- **Built:** a design system on `feat/design-system`: FocusPT tokens reshaped dark-first after Pillowtalk and Future Pro, shadcn/ui pill buttons that grow for fingers and shrink for a mouse, an option row (trainer/client), two page widths, a `/design` style guide, and e2e tests for button sizes and the option row.
+- **Learned:** design tokens are named values every component reads. Changing one file flipped the whole app to dark. Code generators (like `shadcn init`) overwrite your files, so commit first and read the diff after.
+- **Learned:** debugging by checking each layer. Stale styles were the `.next` build cache (delete it, restart). The red hydration error was a browser extension (Bitdefender) adding attributes, proven by opening Incognito. The dev server stops when the app closes; start it with `npm run dev`.
+- **Learned:** a test should be able to fail. My first button test would have passed even with touch sizing broken, so it was tightened to check 56px. References from real apps are evidence for *patterns*, not for brand.
+- **Next:** feature 1, sign-up and log-in with Supabase Auth, using the option row for the role and adding input, label, card and alert components (pill inputs) as the form needs them.
