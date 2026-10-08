@@ -17,3 +17,11 @@ What was built, what was learned, what's next. Newest at the bottom.
 - **Learned:** debugging by checking each layer. Stale styles were the `.next` build cache (delete it, restart). The red hydration error was a browser extension (Bitdefender) adding attributes, proven by opening Incognito. The dev server stops when the app closes; start it with `npm run dev`.
 - **Learned:** a test should be able to fail. My first button test would have passed even with touch sizing broken, so it was tightened to check 56px. References from real apps are evidence for *patterns*, not for brand.
 - **Next:** feature 1, sign-up and log-in with Supabase Auth, using the option row for the role and adding input, label, card and alert components (pill inputs) as the form needs them.
+
+## 2026-10-08 · Session 3: feature 1, sign-up and log-in
+
+- **Built:** sign-up with a trainer/client choice, log-in, log-out, and a home page for each role, on `feat/auth`. Local Supabase in Docker, a `profiles` table with Row Level Security, seed data (1 trainer, 3 clients) and an end-to-end test of the whole flow.
+- **Learned:** a migration is the database's history, written as SQL files; `db reset` replays them. Row Level Security means the database itself checks who's asking, so a bug in a page can't leak someone else's data. Secrets live in `.env.local`, never in git.
+- **Learned:** Server Actions let a form call server code directly. A session cookie is how the app remembers you're logged in. With `cacheComponents`, a page is a static shell sent instantly plus logged-in parts streamed in behind `<Suspense>`.
+- **Learned:** debugging again. A "1 issue" badge led to Supabase reading the clock; the fix came from the Next.js docs, and the server log proved it worked. A failing test isn't always a broken app: one matched Next.js's hidden route announcer, so the test was fixed, not the code.
+- **Next:** open the pull request for `feat/auth` and merge it, then feature 2, the exercise library (clear context first).
