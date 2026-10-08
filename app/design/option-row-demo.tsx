@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import { OptionRow } from "@/components/option-row";
 
 const roles = [
@@ -8,22 +5,17 @@ const roles = [
   { id: "client", label: "I'm a client", description: "See today's workout and log your sets" },
 ];
 
-// Interactive example for /design: one choice at a time, like the role picker at sign-up.
+// Example for /design: one choice at a time, like the role picker at sign-up.
+// No useState needed: the shared `name` makes the browser keep one row selected.
 export function OptionRowDemo() {
-  const [role, setRole] = useState<string | null>(null);
-
   return (
-    <div className="space-y-2">
+    <fieldset className="space-y-2">
+      <legend className="sr-only">Who are you?</legend>
       {roles.map((option) => (
-        <OptionRow
-          key={option.id}
-          selected={role === option.id}
-          description={option.description}
-          onClick={() => setRole(option.id)}
-        >
+        <OptionRow key={option.id} name="demo-role" value={option.id} description={option.description}>
           {option.label}
         </OptionRow>
       ))}
-    </div>
+    </fieldset>
   );
 }
