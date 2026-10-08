@@ -1,19 +1,20 @@
 import { expect, test } from "@playwright/test";
 
-// Option rows: one choice at a time, selectable by tap/click and by keyboard.
+// Option rows are radio buttons: one choice at a time, by tap/click or arrow keys.
 test("option row selects one role at a time", async ({ page }) => {
   await page.goto("/design");
-  const trainer = page.getByRole("button", { name: /I'm a trainer/ });
-  const client = page.getByRole("button", { name: /I'm a client/ });
+  const trainer = page.getByRole("radio", { name: /I'm a trainer/ });
+  const client = page.getByRole("radio", { name: /I'm a client/ });
 
-  await trainer.click();
-  await expect(trainer).toHaveAttribute("aria-pressed", "true");
-  await expect(client).toHaveAttribute("aria-pressed", "false");
+  // Tap the visible row, like a person would (the radio itself is hidden).
+  await page.getByText("I'm a trainer").click();
+  await expect(trainer).toBeChecked();
+  await expect(client).not.toBeChecked();
 
-  await client.focus();
-  await page.keyboard.press("Space");
-  await expect(client).toHaveAttribute("aria-pressed", "true");
-  await expect(trainer).toHaveAttribute("aria-pressed", "false");
+  // Arrow keys move the choice within the group.
+  await page.keyboard.press("ArrowDown");
+  await expect(client).toBeChecked();
+  await expect(trainer).not.toBeChecked();
 });
 
 // The primary action must be easy to tap on a phone, and compact (not full width) with a mouse.

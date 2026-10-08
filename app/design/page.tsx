@@ -217,7 +217,7 @@ export default function DesignPage() {
 
       <Section title="Option row">
         <p className="text-body-small text-muted-foreground">
-          A choice the person taps to select. Used for the trainer or client choice at sign-up. Try it.
+          A choice the person taps to select, built on a radio button. Used for the trainer or client choice at sign-up. Try it with a tap, or Tab then the arrow keys.
         </p>
         <OptionRowDemo />
       </Section>
