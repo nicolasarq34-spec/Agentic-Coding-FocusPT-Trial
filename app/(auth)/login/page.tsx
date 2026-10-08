@@ -1,9 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import { LogInForm } from "./login-form";
-import { getCurrentProfile } from "@/lib/auth/current-profile";
-import { homePathForRole } from "@/lib/auth/home-path";
+import { SendHomeIfLoggedIn } from "@/components/send-home-if-logged-in";
 
 export const metadata: Metadata = {
   title: "Log in · Coach Lab",
@@ -12,7 +10,6 @@ export const metadata: Metadata = {
 export default function LogInPage() {
   return (
     <main className="mx-auto w-full max-w-reading px-4 py-10 sm:px-6 sm:py-16">
-      {/* Already logged in? Go home instead. Inside <Suspense> because it reads the login cookie. */}
       <Suspense>
         <SendHomeIfLoggedIn />
       </Suspense>
@@ -24,11 +21,4 @@ export default function LogInPage() {
       </div>
     </main>
   );
-}
-
-// Shows nothing. Its only job is to redirect someone who is already logged in.
-async function SendHomeIfLoggedIn() {
-  const profile = await getCurrentProfile();
-  if (profile) redirect(homePathForRole(profile.role));
-  return null;
 }
