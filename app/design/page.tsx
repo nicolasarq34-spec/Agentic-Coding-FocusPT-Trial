@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ArrowLeft, List, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
@@ -156,6 +157,29 @@ export default function DesignPage() {
               </Button>
             ))}
           </div>
+        </div>
+        <div className="space-y-3">
+          <Subheading>Icon buttons</Subheading>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button size="icon" variant="secondary" aria-label="Back">
+              <ArrowLeft />
+            </Button>
+            <Button size="icon" variant="secondary" aria-label="Close">
+              <X />
+            </Button>
+            <Button size="icon" variant="secondary" aria-label="Exercise list">
+              <List />
+            </Button>
+          </div>
+        </div>
+        <div className="space-y-3">
+          <Subheading>Primary action</Subheading>
+          <p className="text-body-small text-muted-foreground">
+            Full width on phones, where it sits under the thumb. Sized to its label on wider screens.
+          </p>
+          <Button size="lg" className="w-full sm:w-auto">
+            Start workout
+          </Button>
         </div>
         <div className="space-y-3">
           <Subheading>Disabled</Subheading>
