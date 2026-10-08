@@ -70,7 +70,7 @@ function Subheading({ children }: { children: React.ReactNode }) {
 
 export default function DesignPage() {
   return (
-    <main className="mx-auto w-full max-w-3xl space-y-10 px-4 py-10 sm:px-6">
+    <main className="mx-auto w-full max-w-reading space-y-10 px-4 py-10 sm:px-6 lg:px-8">
       <header className="space-y-2">
         <p className="text-label text-primary">Coach Lab</p>
         <h1 className="font-display text-heading-1">Design system</h1>
@@ -136,6 +136,28 @@ export default function DesignPage() {
             </div>
           ))}
         </div>
+      </Section>
+
+      <Section title="Page widths">
+        <p className="text-body-small text-muted-foreground">
+          Clients mostly use phones, trainers mostly use laptops. Every page picks one of two widths, shown here to
+          scale. Side padding grows with the screen: 16px, then 24px, then 32px.
+        </p>
+        <div className="space-y-3">
+          <div className="space-y-1">
+            <div className="h-10 w-[53%] rounded-sm border border-dashed border-primary/60 bg-accent" />
+            <p className="font-mono text-caption">max-w-reading · 640px</p>
+            <p className="text-caption text-muted-foreground">Client screens, sign-up, log-in, forms</p>
+          </div>
+          <div className="space-y-1">
+            <div className="h-10 w-full rounded-sm border border-dashed border-primary/60 bg-accent" />
+            <p className="font-mono text-caption">max-w-app · 1200px</p>
+            <p className="text-caption text-muted-foreground">Trainer screens: programme builder, dashboard, tables</p>
+          </div>
+        </div>
+        <p className="text-body-small text-muted-foreground">
+          Later, with the trainer pages: a bottom tab bar on phones, a left sidebar from tablet width up.
+        </p>
       </Section>
 
       <Section title="Button">

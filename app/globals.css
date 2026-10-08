@@ -131,6 +131,10 @@
 }
 
 @theme {
+  /* Page widths → `max-w-reading`, `max-w-app`. Side padding: px-4 on phones, sm:px-6, lg:px-8. */
+  --container-reading: 40rem; /* 640px: client screens and forms (sign-up, log-in, today's workout) */
+  --container-app: 75rem; /* 1200px: trainer screens (programme builder, dashboard, tables) */
+
   /* Soft, round shapes. Buttons and inputs are pills (`rounded-full`). */
   --radius-sm: 12px; /* tiles, badges, small surfaces */
   --radius-md: 20px; /* cards, panels, option rows */
