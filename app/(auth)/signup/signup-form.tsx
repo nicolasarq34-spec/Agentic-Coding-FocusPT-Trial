@@ -6,7 +6,7 @@ import { signUp, type SignUpState } from "../actions";
 import { OptionRow } from "@/components/option-row";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Field, FieldError, FormError, fieldAria } from "@/components/form-field";
 import { MIN_PASSWORD_LENGTH } from "@/lib/auth/validate-sign-up";
 
 const roles = [
@@ -41,7 +41,7 @@ export function SignUpForm() {
       </fieldset>
 
       <Field label="Name" name="name" error={errors.name}>
-        <Input id="name" name="name" autoComplete="name" defaultValue={state.fields?.name} {...invalid("name", errors.name)} />
+        <Input id="name" name="name" autoComplete="name" defaultValue={state.fields?.name} {...fieldAria("name", errors.name)} />
       </Field>
 
       <Field label="Email" name="email" error={errors.email}>
@@ -52,7 +52,7 @@ export function SignUpForm() {
           inputMode="email"
           autoComplete="email"
           defaultValue={state.fields?.email}
-          {...invalid("email", errors.email)}
+          {...fieldAria("email", errors.email)}
         />
       </Field>
 
@@ -62,15 +62,11 @@ export function SignUpForm() {
           name="password"
           type="password"
           autoComplete="new-password"
-          {...invalid("password", errors.password, true)}
+          {...fieldAria("password", errors.password, true)}
         />
       </Field>
 
-      {state.formError && (
-        <p role="alert" className="rounded-sm bg-destructive/10 px-4 py-3 text-body-small text-destructive">
-          {state.formError}
-        </p>
-      )}
+      <FormError message={state.formError} />
 
       <div className="space-y-4">
         <Button type="submit" size="lg" className="w-full" disabled={pending}>
@@ -84,47 +80,5 @@ export function SignUpForm() {
         </p>
       </div>
     </form>
-  );
-}
-
-// Links an input to its hint and error, so screen readers read them with the field.
-function invalid(name: string, error: string | undefined, hasHint = false) {
-  const describedBy = [hasHint && `${name}-hint`, error && `${name}-error`].filter(Boolean).join(" ");
-  return { "aria-invalid": error ? true : undefined, "aria-describedby": describedBy || undefined };
-}
-
-function Field({
-  label,
-  name,
-  error,
-  hint,
-  children,
-}: {
-  label: string;
-  name: string;
-  error?: string;
-  hint?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="space-y-2">
-      <Label htmlFor={name}>{label}</Label>
-      {children}
-      {hint && !error && (
-        <p id={`${name}-hint`} className="text-body-small text-muted-foreground">
-          {hint}
-        </p>
-      )}
-      <FieldError id={`${name}-error`} message={error} />
-    </div>
-  );
-}
-
-function FieldError({ id, message }: { id: string; message?: string }) {
-  if (!message) return null;
-  return (
-    <p id={id} className="text-body-small text-destructive">
-      {message}
-    </p>
   );
 }
