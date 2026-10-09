@@ -21,11 +21,12 @@ export async function createProgramme(_prevState: ProgrammeFormState, formData: 
 
   const supabase = await createClient();
   // No trainer_id: the database fills it in with whoever is logged in.
-  const { error } = await supabase.from("programmes").insert(result.data);
+  const { data, error } = await supabase.from("programmes").insert(result.data).select("id").single();
 
   if (error) return saveFailed(error, "adding", fields);
 
-  redirect("/trainer/programmes");
+  // Straight to the new programme, ready for its first workout.
+  redirect(`/trainer/programmes/${data.id}`);
 }
 
 // The edit page pre-fills the id with .bind, like updateExercise.
@@ -49,7 +50,7 @@ export async function updateProgramme(
     return { formError: "This programme doesn’t exist any more, or isn’t yours.", fields };
   }
 
-  redirect("/trainer/programmes");
+  redirect(`/trainer/programmes/${id}`);
 }
 
 // Programme names don't have to be unique, so any database error is a problem on our side.

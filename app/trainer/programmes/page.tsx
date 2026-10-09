@@ -61,9 +61,8 @@ async function ProgrammeList() {
         const workouts = programme.programme_workouts[0]?.count ?? 0;
         return (
           <li key={programme.id} className="hover:bg-muted/50">
-            {/* For now a programme opens its edit form. Step 4 adds the programme page with its weeks. */}
             <Link
-              href={`/trainer/programmes/${programme.id}/edit`}
+              href={`/trainer/programmes/${programme.id}`}
               className="flex items-center gap-2 px-4 py-3 outline-none focus-visible:bg-muted pointer-coarse:py-4"
             >
               <span className="min-w-0 flex-1">

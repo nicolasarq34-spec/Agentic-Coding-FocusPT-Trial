@@ -22,7 +22,7 @@ export default function NewProgrammePage() {
       <h1 className="mt-2 font-display text-heading-1">New programme</h1>
       <p className="mt-2 text-muted-foreground">Name it first. You’ll add weeks and workouts next.</p>
       <div className="mt-8">
-        <ProgrammeForm action={createProgramme} submitLabel="Create programme" pendingLabel="Creating…" />
+        <ProgrammeForm action={createProgramme} cancelHref="/trainer/programmes" submitLabel="Create programme" pendingLabel="Creating…" />
       </div>
     </main>
   );

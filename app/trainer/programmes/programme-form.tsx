@@ -13,6 +13,8 @@ type Props = {
   // Which Server Action saves the form: creating a programme, or editing one.
   action: (prevState: ProgrammeFormState, formData: FormData) => Promise<ProgrammeFormState>;
   initial?: ProgrammeInput;
+  // Where Cancel goes: the list when creating, the programme itself when editing.
+  cancelHref: string;
   submitLabel: string;
   pendingLabel: string;
 };
@@ -20,7 +22,7 @@ type Props = {
 const empty: ProgrammeInput = { name: "", description: "" };
 
 // Same pattern as ExerciseForm: our own error messages, and `key` refills the form after an error.
-export function ProgrammeForm({ action, initial = empty, submitLabel, pendingLabel }: Props) {
+export function ProgrammeForm({ action, initial = empty, cancelHref, submitLabel, pendingLabel }: Props) {
   const [state, formAction, pending] = useActionState(action, {});
   const errors = state.errors ?? {};
   const values = state.fields ?? initial;
@@ -43,7 +45,7 @@ export function ProgrammeForm({ action, initial = empty, submitLabel, pendingLab
       <FormError message={state.formError} />
 
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-        <Link href="/trainer/programmes" className={buttonVariants({ variant: "ghost", size: "lg" })}>
+        <Link href={cancelHref} className={buttonVariants({ variant: "ghost", size: "lg" })}>
           Cancel
         </Link>
         <Button type="submit" size="lg" disabled={pending}>

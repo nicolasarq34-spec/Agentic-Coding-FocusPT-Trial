@@ -16,7 +16,9 @@ export default function EditProgrammePage({ params }: PageProps<"/trainer/progra
   return (
     <main className="mx-auto w-full max-w-reading px-4 py-6 sm:px-6">
       <AppHeader />
-      <BackLink href="/trainer/programmes">Programmes</BackLink>
+      <Suspense fallback={<BackLink href="/trainer/programmes">Programmes</BackLink>}>
+        <BackToProgramme params={params} />
+      </Suspense>
       <h1 className="mt-2 font-display text-heading-1">Edit programme</h1>
       <Suspense fallback={<div aria-hidden className="mt-8 h-64 animate-pulse rounded-md bg-muted" />}>
         <EditProgramme params={params} />
@@ -43,10 +45,17 @@ async function EditProgramme({ params }: { params: Promise<{ id: string }> }) {
     <div className="mt-8">
       <ProgrammeForm
         action={updateProgramme.bind(null, programme.id)}
+        cancelHref={`/trainer/programmes/${programme.id}`}
         initial={{ name: programme.name, description: programme.description ?? "" }}
         submitLabel="Save changes"
         pendingLabel="Saving…"
       />
     </div>
   );
+}
+
+// "‹ Programme", back to the programme page. The id comes from the address, which is only known per request.
+async function BackToProgramme({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return <BackLink href={`/trainer/programmes/${id}`}>Programme</BackLink>;
 }
