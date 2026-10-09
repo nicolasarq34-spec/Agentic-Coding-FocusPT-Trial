@@ -25,3 +25,11 @@ What was built, what was learned, what's next. Newest at the bottom.
 - **Learned:** Server Actions let a form call server code directly. A session cookie is how the app remembers you're logged in. With `cacheComponents`, a page is a static shell sent instantly plus logged-in parts streamed in behind `<Suspense>`.
 - **Learned:** debugging again. A "1 issue" badge led to Supabase reading the clock; the fix came from the Next.js docs, and the server log proved it worked. A failing test isn't always a broken app: one matched Next.js's hidden route announcer, so the test was fixed, not the code.
 - **Next:** open the pull request for `feat/auth` and merge it, then feature 2, the exercise library (clear context first).
+
+## 2026-10-09 · Session 4: feature 2, exercise library
+
+- **Built:** the exercise library on `feat/exercise-library`: an `exercises` table with Row Level Security, form validation, list, add and edit pages, a refactor, and an end-to-end test of the whole flow.
+- **Learned:** tests can pass for the wrong reason. Two database tests passed before the table even existed because they only checked "some error happened"; now they check the exact Postgres error code. Breaking the code on purpose (`"Enter name."`) shows a test really guards something.
+- **Learned:** debugging a "this doesn't exist" error. When the code is right (typecheck passes) but the running app disagrees, suspect something stale: a reload didn't help, restarting the dev server did. And in the e2e test, the log showed Playwright had found the hidden sign-up form's Name field, not ours.
+- **Learned:** a terminal runs commands in a folder (`ENOENT` = no such file there), so open the project folder in VS Code. Diffs are read in the Source Control panel: click the file name, not "Open File". A refactor shows up as red copies turning into one green helper.
+- **Next:** open the pull request for `feat/exercise-library` and merge it, then feature 3, the programme builder (clear context first). Delete for exercises gets decided there.

@@ -37,3 +37,18 @@ Technical decisions and why we made them. Newest at the bottom.
 - **Log-in gives the same error for an unknown email and a wrong password**, so the form can't be used to find out who has an account.
 - **Option row stays a radio button, not `aria-pressed` buttons** (revisited in step 4). The form gets the chosen role for free, and screen readers announce it as a choice of one.
 - **Seed users are inserted into `auth.users` + `auth.identities`**, the same way Supabase Auth creates them, so the trigger builds their profiles. One shared dev-only password, written in `supabase/seed.sql`. Fake people with `@example.com` emails only.
+
+## 2026-10-09 · Feature 2: exercise library
+
+- **Add, list and edit; no delete yet.** Once programmes (feature 3) use exercises, deleting one needs a decision (block it, or keep it in old programmes). There is no delete policy in the database either, so nobody can delete by accident.
+- **Each exercise belongs to one trainer** (`exercises.trainer_id`, filled in by the database with `auth.uid()`). Trainers see and edit only their own; clients get read access in feature 5, for the exercises in their programme.
+- **Names are unique per trainer, ignoring capitals** (a unique index on `lower(name)`). The database decides, and the Server Action turns Postgres error `23505` into "You already have an exercise called…". Checking first and inserting after would leave a gap between the two steps.
+- **The video link is a plain link that opens in a new tab**, not an embedded player. Only `http(s)` links are allowed, in the app and in the database, so a `javascript:` "link" can never become clickable.
+- **The same rules live in two places on purpose:** `validateExercise()` gives friendly messages next to each field; database checks are the safety net if the app ever has a bug.
+- **Updates check that a row was really changed.** RLS silently skips other trainers' rows instead of raising an error, so `updateExercise` asks for the changed row back.
+- **Another trainer's exercise shows "not found"**, exactly like an id that doesn't exist. RLS hides it, so the page can't tell the two apart, and neither can a snooping trainer.
+- **`RequireRole`** (`components/require-role.tsx`) guards pages whose content is the same for everyone, like the empty "New exercise" form: the page is sent instantly and the role check streams in behind `<Suspense>`.
+- **One form for add and edit** (`exercise-form.tsx`). The Server Action comes in as a prop; the edit page pre-fills the exercise id with `.bind`.
+- **Refactored on the third copy, not the first:** `BackLink` and the shared `saveFailed` error handling. Left the page shell (`<main>` + `<AppHeader>`) alone, because trainer pages use two widths and a layout would need an option for it.
+- **Database test helpers are shared** in `tests/db/helpers.ts`.
+- **E2E tests use only visible form fields after client-side navigation.** Next.js keeps recently visited pages alive but hidden, so the sign-up form's "Name" field is still in the page later on.
