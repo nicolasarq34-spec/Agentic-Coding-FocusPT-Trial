@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Dumbbell } from "lucide-react";
+import { ClipboardList, Dumbbell } from "lucide-react";
 import { AppHeader } from "@/components/app-header";
 import { EmptyState } from "@/components/empty-state";
 import { buttonVariants } from "@/components/ui/button";
@@ -30,7 +30,11 @@ async function TrainerHome() {
   return (
     <>
       <h1 className="mt-8 font-display text-heading-1">Hi, {profile.name}</h1>
-      <nav aria-label="Trainer tools" className="mt-6">
+      <nav aria-label="Trainer tools" className="mt-6 flex flex-wrap gap-3">
+        <Link href="/trainer/programmes" className={buttonVariants({ variant: "outline" })}>
+          <ClipboardList aria-hidden />
+          Programmes
+        </Link>
         <Link href="/trainer/exercises" className={buttonVariants({ variant: "outline" })}>
           <Dumbbell aria-hidden />
           Exercise library
