@@ -28,13 +28,7 @@ export async function createExercise(_prevState: ExerciseFormState, formData: Fo
   // No trainer_id: the database fills it in with whoever is logged in.
   const { error } = await supabase.from("exercises").insert(result.data);
 
-  if (error) {
-    if (error.code === DUPLICATE) {
-      return { errors: { name: `You already have an exercise called “${result.data.name}”.` }, fields };
-    }
-    console.error("Adding exercise failed:", error.code, error.message);
-    return { formError: "Something went wrong on our side. Please try again.", fields };
-  }
+  if (error) return saveFailed(error, "adding", result.data.name, fields);
 
   redirect("/trainer/exercises");
 }
@@ -56,18 +50,26 @@ export async function updateExercise(
   // and no error is raised, so we ask for the updated row back to tell the difference.
   const { data, error } = await supabase.from("exercises").update(result.data).eq("id", id).select("id");
 
-  if (error) {
-    if (error.code === DUPLICATE) {
-      return { errors: { name: `You already have an exercise called “${result.data.name}”.` }, fields };
-    }
-    console.error("Updating exercise failed:", error.code, error.message);
-    return { formError: "Something went wrong on our side. Please try again.", fields };
-  }
+  if (error) return saveFailed(error, "updating", result.data.name, fields);
   if (data.length === 0) {
     return { formError: "This exercise doesn’t exist any more, or isn’t yours.", fields };
   }
 
   redirect("/trainer/exercises");
+}
+
+// Turns a database error into what the form shows: a name message for a duplicate, otherwise a general one.
+function saveFailed(
+  error: { code: string; message: string },
+  action: "adding" | "updating",
+  name: string,
+  fields: ExerciseInput,
+): ExerciseFormState {
+  if (error.code === DUPLICATE) {
+    return { errors: { name: `You already have an exercise called “${name}”.` }, fields };
+  }
+  console.error(`${action} exercise failed:`, error.code, error.message);
+  return { formError: "Something went wrong on our side. Please try again.", fields };
 }
 
 function readForm(formData: FormData): ExerciseInput {

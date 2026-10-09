@@ -1,9 +1,8 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
 import { AppHeader } from "@/components/app-header";
+import { BackLink } from "@/components/back-link";
 import { requireRole } from "@/lib/auth/current-profile";
 import { createClient } from "@/lib/supabase/server";
 import { updateExercise } from "../../actions";
@@ -19,13 +18,7 @@ export default function EditExercisePage({ params }: PageProps<"/trainer/exercis
   return (
     <main className="mx-auto w-full max-w-reading px-4 py-6 sm:px-6">
       <AppHeader />
-      <Link
-        href="/trainer/exercises"
-        className="mt-6 inline-flex items-center gap-1 text-body-small text-muted-foreground hover:text-foreground"
-      >
-        <ChevronLeft className="size-4" aria-hidden />
-        Exercises
-      </Link>
+      <BackLink href="/trainer/exercises">Exercises</BackLink>
       <h1 className="mt-2 font-display text-heading-1">Edit exercise</h1>
       <Suspense fallback={<div aria-hidden className="mt-8 h-80 animate-pulse rounded-md bg-muted" />}>
         <EditExercise params={params} />

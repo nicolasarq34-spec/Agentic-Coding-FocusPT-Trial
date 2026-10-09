@@ -1,8 +1,9 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Play, Plus } from "lucide-react";
+import { ChevronRight, Play, Plus } from "lucide-react";
 import { AppHeader } from "@/components/app-header";
+import { BackLink } from "@/components/back-link";
 import { EmptyState } from "@/components/empty-state";
 import { buttonVariants } from "@/components/ui/button";
 import { requireRole } from "@/lib/auth/current-profile";
@@ -18,10 +19,7 @@ export default function ExercisesPage() {
   return (
     <main className="mx-auto w-full max-w-app px-4 py-6 sm:px-6 lg:px-8">
       <AppHeader />
-      <Link href="/trainer" className="mt-6 inline-flex items-center gap-1 text-body-small text-muted-foreground hover:text-foreground">
-        <ChevronLeft className="size-4" aria-hidden />
-        Home
-      </Link>
+      <BackLink href="/trainer">Home</BackLink>
       <div className="mt-2 flex items-center justify-between gap-4">
         <h1 className="font-display text-heading-1">Exercises</h1>
         <Link href="/trainer/exercises/new" className={buttonVariants()}>

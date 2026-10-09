@@ -1,8 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
 import { AppHeader } from "@/components/app-header";
+import { BackLink } from "@/components/back-link";
 import { RequireRole } from "@/components/require-role";
 import { createExercise } from "../actions";
 import { ExerciseForm } from "../exercise-form";
@@ -21,13 +20,7 @@ export default function NewExercisePage() {
         <RequireRole role="trainer" />
       </Suspense>
       <AppHeader />
-      <Link
-        href="/trainer/exercises"
-        className="mt-6 inline-flex items-center gap-1 text-body-small text-muted-foreground hover:text-foreground"
-      >
-        <ChevronLeft className="size-4" aria-hidden />
-        Exercises
-      </Link>
+      <BackLink href="/trainer/exercises">Exercises</BackLink>
       <h1 className="mt-2 font-display text-heading-1">New exercise</h1>
       <div className="mt-8">
         <ExerciseForm action={createExercise} submitLabel="Save exercise" pendingLabel="Saving…" />
