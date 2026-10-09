@@ -39,3 +39,13 @@ select
   jsonb_build_object('sub', id::text, 'email', email, 'email_verified', true),
   'email', now(), now(), now()
 from new_users;
+
+-- Tara's exercise library. trainer_id is written out because the seed runs as the database admin,
+-- not as a logged-in trainer (so the auth.uid() default would be empty). Video links are placeholders.
+insert into public.exercises (trainer_id, name, description, video_url)
+values
+  ('00000000-0000-4000-a000-000000000001', 'Back squat', 'Bar on the upper back. Sit down between the heels, chest up.', 'https://example.com/videos/back-squat'),
+  ('00000000-0000-4000-a000-000000000001', 'Bench press', 'Feet planted, shoulder blades pinched. Bar to mid-chest.', 'https://example.com/videos/bench-press'),
+  ('00000000-0000-4000-a000-000000000001', 'Romanian deadlift', 'Soft knees, push the hips back, bar close to the legs.', null),
+  ('00000000-0000-4000-a000-000000000001', 'Pull-up', null, null),
+  ('00000000-0000-4000-a000-000000000001', 'Plank', 'Straight line from head to heels. Breathe.', null);
