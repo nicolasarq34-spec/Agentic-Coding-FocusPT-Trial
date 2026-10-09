@@ -63,6 +63,72 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"programme_exercises": {
+                  Row: {
+                    "exercise_id": string,"id": string,"position": number,"target_reps": number,"target_sets": number,"target_weight": number | null,"workout_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "exercise_id": string,"id"?: string,"position": number,"target_reps": number,"target_sets": number,"target_weight"?: number | null,"workout_id": string
+                  }
+                  Update: {
+                    "exercise_id"?: string,"id"?: string,"position"?: number,"target_reps"?: number,"target_sets"?: number,"target_weight"?: number | null,"workout_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "programme_exercises_exercise_id_fkey"
+      columns: ["exercise_id"]
+isOneToOne: false
+      referencedRelation: "exercises"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "programme_exercises_workout_id_fkey"
+      columns: ["workout_id"]
+isOneToOne: false
+      referencedRelation: "programme_workouts"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"programme_workouts": {
+                  Row: {
+                    "day": number,"id": string,"name": string | null,"programme_id": string,"week": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "day": number,"id"?: string,"name"?: string | null,"programme_id": string,"week": number
+                  }
+                  Update: {
+                    "day"?: number,"id"?: string,"name"?: string | null,"programme_id"?: string,"week"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "programme_workouts_programme_id_fkey"
+      columns: ["programme_id"]
+isOneToOne: false
+      referencedRelation: "programmes"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"programmes": {
+                  Row: {
+                    "created_at": string,"description": string | null,"id": string,"name": string,"trainer_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"description"?: string | null,"id"?: string,"name": string,"trainer_id"?: string
+                  }
+                  Update: {
+                    "created_at"?: string,"description"?: string | null,"id"?: string,"name"?: string,"trainer_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "programmes_trainer_id_fkey"
+      columns: ["trainer_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
                 }
           }
           Views: {

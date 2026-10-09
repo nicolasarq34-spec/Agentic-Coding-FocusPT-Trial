@@ -49,3 +49,27 @@ values
   ('00000000-0000-4000-a000-000000000001', 'Romanian deadlift', 'Soft knees, push the hips back, bar close to the legs.', null),
   ('00000000-0000-4000-a000-000000000001', 'Pull-up', null, null),
   ('00000000-0000-4000-a000-000000000001', 'Plank', 'Straight line from head to heels. Breathe.', null);
+
+-- Tara's demo programme: week 1 with two workouts. Exercises are looked up by name.
+insert into public.programmes (id, trainer_id, name, description)
+values (
+  '00000000-0000-4000-b000-000000000001', '00000000-0000-4000-a000-000000000001',
+  'Beginner strength', 'Three lifts, done well. Add a little weight each week.'
+);
+
+insert into public.programme_workouts (id, programme_id, week, day, name)
+values
+  ('00000000-0000-4000-c000-000000000001', '00000000-0000-4000-b000-000000000001', 1, 1, 'Lower body'),
+  ('00000000-0000-4000-c000-000000000002', '00000000-0000-4000-b000-000000000001', 1, 3, 'Upper body');
+
+insert into public.programme_exercises (workout_id, exercise_id, position, target_sets, target_reps, target_weight)
+select w.workout_id::uuid, e.id, w.position, w.sets, w.reps, w.weight
+from (
+  values
+    ('00000000-0000-4000-c000-000000000001', 'Back squat', 1, 3, 5, 60.0),
+    ('00000000-0000-4000-c000-000000000001', 'Romanian deadlift', 2, 3, 8, 50.0),
+    ('00000000-0000-4000-c000-000000000001', 'Plank', 3, 3, 1, null),
+    ('00000000-0000-4000-c000-000000000002', 'Bench press', 1, 3, 5, 40.0),
+    ('00000000-0000-4000-c000-000000000002', 'Pull-up', 2, 3, 6, null)
+) as w (workout_id, exercise_name, position, sets, reps, weight)
+join public.exercises e on e.name = w.exercise_name and e.trainer_id = '00000000-0000-4000-a000-000000000001';
