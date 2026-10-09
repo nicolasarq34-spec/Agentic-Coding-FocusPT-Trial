@@ -39,6 +39,37 @@ export async function createExercise(_prevState: ExerciseFormState, formData: Fo
   redirect("/trainer/exercises");
 }
 
+// The edit page "pre-fills" the id with .bind, so the form calls this with the same two arguments as createExercise.
+export async function updateExercise(
+  id: string,
+  _prevState: ExerciseFormState,
+  formData: FormData,
+): Promise<ExerciseFormState> {
+  await requireRole("trainer");
+
+  const fields = readForm(formData);
+  const result = validateExercise(fields);
+  if (!result.ok) return { errors: result.errors, fields };
+
+  const supabase = await createClient();
+  // RLS only lets a trainer update their own rows. For anyone else's id, nothing is updated
+  // and no error is raised, so we ask for the updated row back to tell the difference.
+  const { data, error } = await supabase.from("exercises").update(result.data).eq("id", id).select("id");
+
+  if (error) {
+    if (error.code === DUPLICATE) {
+      return { errors: { name: `You already have an exercise called “${result.data.name}”.` }, fields };
+    }
+    console.error("Updating exercise failed:", error.code, error.message);
+    return { formError: "Something went wrong on our side. Please try again.", fields };
+  }
+  if (data.length === 0) {
+    return { formError: "This exercise doesn’t exist any more, or isn’t yours.", fields };
+  }
+
+  redirect("/trainer/exercises");
+}
+
 function readForm(formData: FormData): ExerciseInput {
   return {
     name: formData.get("name")?.toString() ?? "",
